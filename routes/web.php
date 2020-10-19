@@ -24,4 +24,7 @@ $router->group([
         $router->post('register', 'Api\AuthController@register');
         $router->post('login', 'Api\AuthController@login');
         $router->post('logout', 'Api\AuthController@logout');
+
+        $router->post('/password/reset-request', 'Api\RequestPasswordController@sendResetLinkEmail');
+        $router->post('/password/reset', [ 'as' => 'password.reset', 'uses' => 'Api\ResetPasswordController@reset' ]);
 });
