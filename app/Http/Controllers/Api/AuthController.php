@@ -99,4 +99,19 @@ class AuthController extends Controller
             'status' => true
         ], 200);
     }
+
+    /**
+     * Get user details.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function me()
+    {
+        return response()->json([
+            'user' => auth()->user(),
+            'status' => true
+        ], 200);
+    }
+
 }
