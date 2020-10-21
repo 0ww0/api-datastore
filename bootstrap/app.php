@@ -60,7 +60,6 @@ $app->singleton(
 */
 
 $app->configure('app');
-$app->configure('cors');
 $app->configure('mail');
 
 $app->alias('mail.manager', Illuminate\Mail\MailManager::class);
@@ -82,8 +81,7 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 */
 
 $app->middleware([
-    //App\Http\Middleware\ExampleMiddleware::class,
-    Fruitcake\Cors\HandleCors::class,
+    App\Http\Middleware\CorsMiddleware::class,
 ]);
 
 $app->routeMiddleware([
@@ -106,7 +104,6 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-$app->register(Fruitcake\Cors\CorsServiceProvider::class);
 $app->register(Illuminate\Mail\MailServiceProvider::class);
 
 /*
