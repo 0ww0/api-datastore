@@ -33,4 +33,13 @@ $router->group([
 
         $router->get('me', 'Api\AuthController@me');
         $router->post('logout', 'Api\AuthController@logout');
+        $router->post('refresh', 'Api\AuthController@refresh');
+
+        $router->group([
+            'prefix' => 'user'
+        ], function () use ($router) {
+
+            $router->get('/', 'Api\UserController@index');
+
+        });
 });
