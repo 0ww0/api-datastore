@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMessage;
+
 
 class AuthController extends Controller
 {
@@ -42,6 +45,10 @@ class AuthController extends Controller
             $user->email = $request->input('email');
             $plainPassword = $request->input('password');
             $user->password = app('hash')->make($plainPassword);
+
+            $email = $request->get('email');
+
+            Mail::to($email)->send(new WelcomeMessage($user));
 
             $user->save();
 
