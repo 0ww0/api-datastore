@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\Mail\WelcomeMessage;
 
 
@@ -19,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify']]);
     }
 
     /**
@@ -45,6 +46,7 @@ class AuthController extends Controller
             $user->email = $request->input('email');
             $plainPassword = $request->input('password');
             $user->password = app('hash')->make($plainPassword);
+            $user->verification_token = Str::random(64);
 
             $email = $request->get('email');
 
@@ -55,7 +57,7 @@ class AuthController extends Controller
             //return successful response
             return response()->json([
                 'user' => $user,
-                'message' => 'Created',
+                'message' => 'Account created. Please verify via email.',
                 'status' => 'Success'
             ], 201);
 
@@ -90,6 +92,27 @@ class AuthController extends Controller
         }
 
         return $this->respondWithToken($token);
+    }
+
+    /**
+     * Verify User
+     *
+     * @queryParam token required The token
+     *
+     * @param String $token
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function verify(Request $request)
+    {
+        $token = $request->get('token');
+        $user = User::verifyByToken($token);
+
+        if (!$user) {
+            return response()->json(['data' => ['message' => 'Invalid verification token']], 400);
+        }
+
+        return response()->json(['data' => ['message' => 'Account has been verified']]);
     }
 
     /**

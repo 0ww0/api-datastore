@@ -23,11 +23,12 @@ $router->group([
 
         $router->post('register', 'Api\AuthController@register');
         $router->post('login', 'Api\AuthController@login');
+        $router->get('verify', 'Api\AuthController@verify');
 });
 
 
 $router->group([
-        'middleware' => 'auth',
+        'middleware' => ['auth', 'verified'],
         'prefix' => 'api'
     ], function () use ($router) {
 

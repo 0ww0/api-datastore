@@ -29,7 +29,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'verified', 'verification_token',
     ];
 
     /**
@@ -60,4 +60,37 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
+    /**
+     * Verify by token
+     *
+     * @param $token
+     * @return false|User
+     */
+    public static function verifyByToken($token)
+    {
+        $user = (new static)->where(['verification_token' => $token, 'verified' => 0])->first();
+
+        if (!$user) {
+            return false;
+        }
+
+        $user->verify();
+
+        return $user;
+    }
+
+    /**
+     * Verifiy a user
+     *
+     * @return bool
+     */
+    public function verify()
+    {
+        $this->verification_token = null;
+        $this->verified = 1;
+        $this->email_verified_at = $this->freshTimestamp();
+
+        return $this->save();
+    }
+
 }
