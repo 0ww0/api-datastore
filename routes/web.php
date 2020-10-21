@@ -23,11 +23,18 @@ $router->group([
 
         $router->post('register', 'Api\AuthController@register');
         $router->post('login', 'Api\AuthController@login');
+
+        $router->group([
+            'prefix' => 'email'
+        ], function () use ($router) {
+
+            $router->post('verify', ['as' => 'email.verify', 'uses' => 'Api\AuthController@emailVerify']);
+        });
 });
 
 
 $router->group([
-        'middleware' => 'auth',
+        'middleware' => ['auth', 'verified'],
         'prefix' => 'api'
     ], function () use ($router) {
 
@@ -41,5 +48,12 @@ $router->group([
 
             $router->get('/', 'Api\UserController@index');
 
+        });
+
+        $router->group([
+            'prefix' => 'email'
+        ], function () use ($router) {
+
+            $router->post('request-verification', ['as' => 'email.request.verification', 'uses' => 'Api\AuthController@emailRequestVerification']);
         });
 });
