@@ -24,6 +24,15 @@ $router->group([
         $router->post('register', 'Api\AuthController@register');
         $router->post('login', 'Api\AuthController@login');
         $router->get('verify', 'Api\AuthController@verify');
+
+        $router->group([
+            'prefix' => 'password'
+        ], function () use ($router) {
+
+            $router->post('forgot', 'Api\PasswordController@forgot');
+            $router->post('recover', 'Api\PasswordController@recover');
+
+        });
 });
 
 

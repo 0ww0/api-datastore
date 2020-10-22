@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 
-class WelcomeMessage extends Mailable
+class PasswordReset extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -31,10 +31,10 @@ class WelcomeMessage extends Mailable
      */
     public function build()
     {
-        $subject = 'Welcome to Demo App';
+        $subject = 'Password Reset';
 
-        return $this->view('emails.welcome')
+        return $this->view('emails.password-reset')
                     ->subject($subject)
-                    ->with(['data' => $this->data]);
+                    ->with(['data' => $this->data, 'token' => $this->data->createPasswordRecoveryToken()]);
     }
 }

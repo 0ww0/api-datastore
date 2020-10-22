@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Str;
+
+Use DB;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
@@ -93,4 +96,65 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->save();
     }
 
+    /**
+     * Get user by email
+     *
+     * @param $email
+     * @return User
+     */
+    public static function byEmail($email)
+    {
+        return (new static)->where(compact('email'))->first();
+    }
+
+    /**
+     * Create password recovery token
+     */
+    public function createPasswordRecoveryToken()
+    {
+        $token = Str::random(64);
+
+        $created = DB::table('password_resets')->updateOrInsert(
+            ['email' => $this->email],
+            ['email' => $this->email, 'token' => $token]
+        );
+
+        return $created ? $token : false;
+    }
+
+    /**
+     * Restore password by token
+     *
+     * @param $token
+     * @param $password
+     * @return false|User
+     */
+    public static function newPasswordByResetToken($token, $password)
+    {
+        $query = DB::table('password_resets')->where(compact('token'));
+
+        $record = $query->first();
+
+        if (!$record) {
+            return false;
+        }
+
+        $user = self::byEmail($record->email);
+
+        $query->delete();
+
+        return $user->setPassword($password);
+    }
+
+    /**
+     * Persist a new password for the user
+     *
+     * @param $password
+     * @return bool
+     */
+    public function setPassword($password)
+    {
+        $this->password = app('hash')->make($password);;
+        return $this->save();
+    }
 }
