@@ -20,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -54,19 +54,21 @@ class AuthController extends Controller
 
             $user->save();
 
-            //return successful response
             return response()->json([
-                'user' => $user,
+                'success' => true,
                 'message' => 'Account created. Please verify via email.',
-                'status' => 'Success'
+                'data' =>  $user
             ], 201);
 
         } catch (\Exception $e) {
-            //return error message
+
             return response()->json([
+                'success' => false,
                 'message' => 'User Registration Failed!',
-                'status' => 'Failed'
+                'error_code' => 409,
+                'data' => $user
             ], 409);
+
         }
 
     }
@@ -87,32 +89,17 @@ class AuthController extends Controller
 
         $credentials = $request->only(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        $token = auth()->attempt($credentials);
+
+        if (! $token ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+                'error_code' => 401,
+            ], 401);
         }
 
         return $this->respondWithToken($token);
-    }
-
-    /**
-     * Verify User
-     *
-     * @queryParam token required The token
-     *
-     * @param String $token
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function verify(Request $request)
-    {
-        $token = $request->get('token');
-        $user = User::verifyByToken($token);
-
-        if (!$user) {
-            return response()->json(['data' => ['message' => 'Invalid verification token']], 400);
-        }
-
-        return response()->json(['data' => ['message' => 'Account has been verified']]);
     }
 
     /**
@@ -125,8 +112,8 @@ class AuthController extends Controller
         auth()->logout();
 
         return response()->json([
+            'success' => true,
             'message' => 'Successfully logged out',
-            'status' => true
         ], 200);
     }
 
@@ -139,8 +126,9 @@ class AuthController extends Controller
     public function me()
     {
         return response()->json([
-            'user' => auth()->user(),
-            'status' => true
+            'success' => true,
+            'message' => 'Retrive User info',
+            'data' => auth()->user(),
         ], 200);
     }
 

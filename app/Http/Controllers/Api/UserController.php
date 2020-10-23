@@ -20,8 +20,13 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::paginate(10);
-        return response()->json($users);
+        $data = User::paginate(10);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully get list',
+            'data' => $data,
+        ], 200);
     }
 
     public function create(Request $request)
@@ -31,8 +36,46 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $users = User::find($id);
-        return response()->json($user);
+        $data = User::find($id);
+
+        if(! $data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Id not found',
+                'error_code' => 204,
+            ], 204);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully get id',
+            'data' => $data
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+
+    }
+
+    public function destroy($id)
+    {
+        $data = User::find($id);
+        $data->delete();
+
+        if(! $data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Id not found',
+                'error_code' => 204,
+            ], 204);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully delete id',
+            'data' => $data
+        ], 200);
     }
 
 }

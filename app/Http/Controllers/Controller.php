@@ -9,10 +9,14 @@ class Controller extends BaseController
 {
     protected function respondWithToken($token)
     {
-       return response()->json([
-           'token' => $token,
-           'token_type' => 'bearer',
-           'expires_in' => Auth::factory()->getTTL() * 60
-       ], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully generate token',
+            'data' => [
+                'token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => Auth::factory()->getTTL() * 60
+            ]
+        ], 200);
     }
 }

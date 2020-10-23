@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use App\Mail\PasswordReset;
 
 class PasswordController extends Controller
@@ -41,7 +39,18 @@ class PasswordController extends Controller
 
         Mail::to($user)->send(new PasswordReset($user));
 
-        return response()->json(['data' => ['message' => 'Please check your email to reset your password.']]);
+        if(! $user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid email address',
+                'error_code' => 400,
+            ], 400);
+        }
+
+        return response()->json([
+            'success' => true
+            'message' => 'Please check your email to reset your password.'
+        ], 200);
     }
 
     /**
@@ -52,7 +61,6 @@ class PasswordController extends Controller
      * @param Request $request
      * @param $token
      * @return JsonResponse
-     * @throws ValidationException
      */
     public function recover(Request $request)
     {
@@ -64,11 +72,18 @@ class PasswordController extends Controller
 
         $user = User::newPasswordByResetToken($token, $request->input('password'));
 
-        if ($user) {
-            return response()->json(['data' => ['message' => 'Password has been changed.']]);
-        } else {
-            return response()->json(['data' => ['message' => 'Invalid password reset token']], 400);
+        if (! $user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid password reset token',
+                'error_code' => 400,
+            ], 400);
         }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password has been changed.'
+        ], 200);
     }
 
 }

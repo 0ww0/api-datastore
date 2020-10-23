@@ -37,12 +37,16 @@ class Authenticate
     {
         if ($this->auth->guard($guard)->guest()) {
             return response()->json([
-                'errors' => [
-                    'title' => 'Unauthorized'
-                ]
+                'success' => false,
+                'message' => 'Unauthorized',
+                'error_code' => 401
             ], 401);
         }
 
-        return $next($request);
+        $response = $next($request);
+
+        // Post-Middleware Action
+
+        return $response;
     }
 }

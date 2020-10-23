@@ -21,8 +21,10 @@ class VerifiedUsers
 
         if(!$user->verified) {
             return response()->json([
-                'message' =>  'Account has not been verified'
-            ]);
+                'success' => false,
+                'message' => 'Unauthorized',
+                'error_code' => 401
+            ], 401);
         }
         // Pre-Middleware Action
 

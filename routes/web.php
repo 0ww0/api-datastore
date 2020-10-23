@@ -23,7 +23,14 @@ $router->group([
 
         $router->post('register', 'Api\AuthController@register');
         $router->post('login', 'Api\AuthController@login');
-        $router->get('verify', 'Api\AuthController@verify');
+
+        $router->group([
+            'prefix' => 'email'
+        ], function () use ($router) {
+
+            $router->get('verify', 'Api\EmailController@verify');
+
+        });
 
         $router->group([
             'prefix' => 'password'
