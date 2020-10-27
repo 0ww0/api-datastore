@@ -57,6 +57,10 @@ $router->group([
         ], function () use ($router) {
 
             $router->get('/', 'Api\UserController@index');
+            $router->post('/', 'Api\UserController@create');
+            $router->get('/{id}', 'Api\UserController@show');
+            $router->put('/{id}', 'Api\UserController@update');
+            $router->delete('/{id}', 'Api\UserController@destroy');
 
         });
 });

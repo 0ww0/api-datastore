@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -50,9 +51,14 @@ class AuthController extends Controller
 
             $email = $request->get('email');
 
-            Mail::to($email)->send(new WelcomeMessage($user));
-
             $user->save();
+
+            $user->profile = new Profile;
+            $user->profile->image = $request->input('image');
+
+            $user->profile()->save($user->profile);
+
+            Mail::to($email)->send(new WelcomeMessage($user));
 
             return response()->json([
                 'success' => true,
@@ -66,7 +72,6 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'User Registration Failed!',
                 'error_code' => 409,
-                'data' => $user
             ], 409);
 
         }
@@ -125,10 +130,13 @@ class AuthController extends Controller
      */
     public function me()
     {
+        $user = auth()->user();
+        $user->profile = auth()->user()->profile;
+
         return response()->json([
             'success' => true,
             'message' => 'Retrive User info',
-            'data' => auth()->user(),
+            'data' => $user,
         ], 200);
     }
 

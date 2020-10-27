@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Str;
-
 Use DB;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
@@ -43,6 +42,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function profile()
+    {
+        return $this->hasOne('App\Models\Profile');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

@@ -48,7 +48,7 @@ class PasswordController extends Controller
         }
 
         return response()->json([
-            'success' => true
+            'success' => true,
             'message' => 'Please check your email to reset your password.'
         ], 200);
     }

@@ -36,7 +36,7 @@ class EmailController extends Controller
         if (! $user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid verification token'
+                'message' => 'Invalid verification token',
                 'error_code' => 400,
             ], 400);
         }
