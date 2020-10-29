@@ -54,11 +54,19 @@ class AuthController extends Controller
             $user->save();
 
             $user->profile = new Profile;
-            $user->profile->image = $request->input('image');
+            $user->profile->image = '/default/avatar.png';
+
+            // if($request->hasFile('image')){
+            //     $extension = $request->file('image')->getClientOriginalExtension();
+            //     $filename  = 'profile-photo-' . time() . '.' . $extension;
+            //     $destination = './images/avatar/';
+            //     $path = $request->file('image')->move($destination, $filename);
+            //     $user->profile->image = $path;
+            // }
 
             $user->profile()->save($user->profile);
 
-            Mail::to($email)->send(new WelcomeMessage($user));
+            //Mail::to($email)->send(new WelcomeMessage($user));
 
             return response()->json([
                 'success' => true,

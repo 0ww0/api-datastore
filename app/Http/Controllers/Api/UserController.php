@@ -56,7 +56,14 @@ class UserController extends Controller
             $user->save();
 
             $user->profile = new Profile;
-            $user->profile->image = $request->input('image');
+
+            if($request->hasFile('image')){
+                $extension = $request->file('image')->getClientOriginalExtension();
+                $filename  = 'profile-photo-' . time() . '.' . $extension;
+                $destination = '/images/avatar/';
+                $path = $request->file('image')->move($destination, $filename);
+                $user->profile->image = $path;
+            }
 
             $user->profile()->save($user->profile);
 
@@ -103,7 +110,14 @@ class UserController extends Controller
     {
         $data = User::find($id);
         $data->name = $request->input('name');
-        $data->profile->image = $request->input('image');
+        
+        if($request->hasFile('image')){
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename  = 'profile-photo-' . time() . '.' . $extension;
+            $destination = '/images/avatar/';
+            $path = $request->file('image')->move($destination, $filename);
+            $user->profile->image = $path;
+        }
 
         $data->push();
 
