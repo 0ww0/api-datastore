@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class VerifiedUsers
+class Verified
 {
     /**
      * Handle an incoming request.

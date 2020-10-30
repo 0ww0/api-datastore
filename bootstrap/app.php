@@ -86,7 +86,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    'verified' => \App\Http\Middleware\VerifiedUsers::class,
+    'verified' => App\Http\Middleware\Verified::class,
 ]);
 
 /*
