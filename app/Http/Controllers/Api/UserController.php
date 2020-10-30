@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $data = User::with('profile')->paginate(10);
+        $data = User::with('profile', 'roles')->paginate(10);
 
         return response()->json([
             'success' => true,
@@ -110,7 +110,7 @@ class UserController extends Controller
     {
         $data = User::find($id);
         $data->name = $request->input('name');
-        
+
         if($request->hasFile('image')){
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename  = 'profile-photo-' . time() . '.' . $extension;
@@ -139,6 +139,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $data = User::find($id);
+        $data->roles()->detach();
         $data->delete();
 
         if(! $data) {

@@ -28,7 +28,7 @@ $router->group([
             'prefix' => 'email'
         ], function () use ($router) {
 
-            $router->get('verify', 'Api\EmailController@verify');
+            $router->get('verify', ['as' => 'email.verify', 'uses' => 'Api\EmailController@verify']);
 
         });
 

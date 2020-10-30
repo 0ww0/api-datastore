@@ -31,7 +31,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'verified', 'verification_token',
+        'password', 'remember_token', 'verified', 'verification_token', 'email_verified_at'
     ];
 
     /**
@@ -47,6 +47,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function profile()
     {
         return $this->hasOne('App\Models\Profile');
+    }
+
+    /**
+     * App\Models\Role relation.
+     *
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'role_user');
     }
 
     /**

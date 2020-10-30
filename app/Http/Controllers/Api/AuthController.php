@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -56,6 +57,12 @@ class AuthController extends Controller
             $user->profile = new Profile;
             $user->profile->image = '/default/avatar.png';
 
+            $role = 'admin';
+
+            $attach_role = Role::where('name', $role)->get('id')->first();
+
+            $user->roles()->attach($attach_role);
+
             // if($request->hasFile('image')){
             //     $extension = $request->file('image')->getClientOriginalExtension();
             //     $filename  = 'profile-photo-' . time() . '.' . $extension;
@@ -66,7 +73,7 @@ class AuthController extends Controller
 
             $user->profile()->save($user->profile);
 
-            //Mail::to($email)->send(new WelcomeMessage($user));
+            Mail::to($email)->send(new WelcomeMessage($user));
 
             return response()->json([
                 'success' => true,
