@@ -7,6 +7,6 @@
         <h2> Hi {{$data['name']}}, we’re glad you’re here! Following are your account details:</h2> <br>
         <h2>Name : {{ $data['name'] }}</h2>
         <h2>Email : {{ $data['email'] }}</h2>
-        <h2>Token : <a href="{{'http://localhost:8000/api/password/recover?token=' .$token }}">Verifed Token</a> </h2>
+        <h2>Token : <a href="{{ route('password.recover') . '?token=' . $token }}">Verifed Token</a> </h2>
     </body>
 </html>

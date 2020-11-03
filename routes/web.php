@@ -36,8 +36,8 @@ $router->group([
             'prefix' => 'password'
         ], function () use ($router) {
 
-            $router->post('forgot', 'Api\PasswordController@forgot');
-            $router->post('recover', 'Api\PasswordController@recover');
+            $router->post('forgot', ['as' => 'password.forgot', 'uses' => 'Api\PasswordController@forgot']);
+            $router->post('recover', ['as' => 'password.recover', 'uses' => 'Api\PasswordController@recover']);
 
         });
 });
