@@ -11,16 +11,6 @@ use Illuminate\Support\Str;
 class LoginController extends Controller
 {
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        
-    }
-
-    /**
     * Get a JWT via given credentials.
     *
     * @param  Request  $request

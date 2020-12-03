@@ -9,18 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PasswordReset;
 
-class PasswordController extends Controller
+class ForgotController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
     * Send new Password Request
     *
@@ -52,38 +42,4 @@ class PasswordController extends Controller
             'message' => 'Please check your email to reset your password.'
         ], 200);
     }
-
-    /**
-     * Create new P assword
-     *
-     * @bodyParam password string required The new password
-     *
-     * @param Request $request
-     * @param $token
-     * @return JsonResponse
-     */
-    public function recover(Request $request)
-    {
-        $this->validate($request, [
-            'password' => 'required|min:8',
-        ]);
-
-        $token = $request->get('token');
-
-        $user = User::newPasswordByResetToken($token, $request->input('password'));
-
-        if (! $user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid password reset token',
-                'error_code' => 400,
-            ], 400);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Password has been changed.'
-        ], 200);
-    }
-
 }

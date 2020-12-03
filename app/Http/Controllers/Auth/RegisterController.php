@@ -17,16 +17,6 @@ use App\Mail\WelcomeMessage;
 class RegisterController extends Controller
 {
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        
-    }
-
-    /**
      * Store a new user.
      *
      * @param  Request  $request

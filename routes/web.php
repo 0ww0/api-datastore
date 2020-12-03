@@ -21,14 +21,14 @@ $router->group([
         'prefix' => 'public'
     ], function () use ($router) {
 
-        $router->post('register', 'Auth\RegisterController');
-        $router->post('login', 'Auth\LoginController');
+        $router->post('register', 'Auth\RegisterController@register');
+        $router->post('login', 'Auth\LoginController@login');
 
         $router->group([
             'prefix' => 'email'
         ], function () use ($router) {
 
-            $router->get('verify', ['as' => 'email.verify', 'uses' => 'Api\EmailController@verify']);
+            $router->get('verify', ['as' => 'email.verify', 'uses' => 'Email\VerifyController@verify']);
 
         });
 
@@ -36,8 +36,8 @@ $router->group([
             'prefix' => 'password'
         ], function () use ($router) {
 
-            $router->post('forgot', ['as' => 'password.forgot', 'uses' => 'Api\PasswordController@forgot']);
-            $router->post('recover', ['as' => 'password.recover', 'uses' => 'Api\PasswordController@recover']);
+            $router->post('forgot', ['as' => 'password.forgot', 'uses' => 'Password\ForgotController@forgot']);
+            $router->post('recover', ['as' => 'password.recover', 'uses' => 'Password\RecoverController@recover']);
 
         });
 });
@@ -48,18 +48,18 @@ $router->group([
         'prefix' => 'api'
     ], function () use ($router) {
 
-        $router->get('me', 'Auth\MeController');
-        $router->post('logout', 'Auth\LogoutController');
-        $router->post('refresh', 'Auth\RefreshController');
+        $router->get('me', 'Auth\MeController@me');
+        $router->post('logout', 'Auth\LogoutController@logout');
+        $router->post('refresh', 'Auth\RefreshController@refresh');
 
         $router->group([
             'prefix' => 'user'
         ], function () use ($router) {
 
-            $router->get('/', 'Api\UserController@index');
-            $router->get('/{id}', 'Api\UserController@show');
-            $router->put('/{id}', 'Api\UserController@update');
-            $router->delete('/{id}', 'Api\UserController@destroy');
+            $router->get('/', 'User\UserController@index');
+            $router->get('/{id}', 'User\UserController@show');
+            $router->put('/{id}', 'User\UserController@update');
+            $router->delete('/{id}', 'User\UserController@destroy');
 
         });
 });
