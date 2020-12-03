@@ -31,10 +31,10 @@ class UsersTableSeeder extends Seeder
 
         $user->roles()->attach($attach_role);
 
-        $user_profile = new Profile([
+        $profile = new Profile([
             'image' => '/default/avatar.png'
         ]);
 
-        $user->profile()->save($user_profile);
+        $user->profile()->save($profile);
     }
 }
