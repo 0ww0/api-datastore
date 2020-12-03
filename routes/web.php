@@ -18,11 +18,11 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group([
-        'prefix' => 'api'
+        'prefix' => 'public'
     ], function () use ($router) {
 
-        $router->post('register', 'Api\AuthController@register');
-        $router->post('login', 'Api\AuthController@login');
+        $router->post('register', 'Auth\RegisterController');
+        $router->post('login', 'Auth\LoginController');
 
         $router->group([
             'prefix' => 'email'
@@ -48,9 +48,9 @@ $router->group([
         'prefix' => 'api'
     ], function () use ($router) {
 
-        $router->get('me', 'Api\AuthController@me');
-        $router->post('logout', 'Api\AuthController@logout');
-        $router->post('refresh', 'Api\AuthController@refresh');
+        $router->get('me', 'Auth\MeController');
+        $router->post('logout', 'Auth\LogoutController');
+        $router->post('refresh', 'Auth\RefreshController');
 
         $router->group([
             'prefix' => 'user'
