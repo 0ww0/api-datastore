@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\User;
-use App\Models\Profile;
-use App\Models\Role;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Models\User;
+use App\Models\Profile;
+use App\Models\Role;
 use App\Mail\WelcomeMessage;
 
 class RegisterController extends Controller

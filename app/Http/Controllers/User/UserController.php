@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\User;
 
-use App\Models\User;
-use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Models\User;
+use App\Models\Profile;
 use App\Mail\WelcomeMessage;
 
 class UserController extends Controller
