@@ -14,7 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return 'not found';
 });
 
 $router->group([
@@ -42,24 +42,3 @@ $router->group([
         });
 });
 
-
-$router->group([
-        'middleware' => ['auth', 'verified'],
-        'prefix' => 'api'
-    ], function () use ($router) {
-
-        $router->get('me', 'Auth\MeController@me');
-        $router->post('logout', 'Auth\LogoutController@logout');
-        $router->post('refresh', 'Auth\RefreshController@refresh');
-
-        $router->group([
-            'prefix' => 'user'
-        ], function () use ($router) {
-
-            $router->get('/', 'User\UserController@index');
-            $router->get('/{id}', 'User\UserController@show');
-            $router->put('/{id}', 'User\UserController@update');
-            $router->delete('/{id}', 'User\UserController@destroy');
-
-        });
-});
